@@ -3,6 +3,7 @@ import { lazy } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import PublicLayout from "../layouts/PublicLayout";
 import PrivateLayout from "../layouts/PrivateLayout";
+import AddUpdateMovie from "../pages/movies/AddUpdateMovie";
 
 // lazy-loaded pages
 const Login = lazy(() => import("../pages/auth/Login"));
@@ -53,9 +54,9 @@ export const routes = [
         element: <PrivateRoute />,
         children: [
             { path: "/movies", element: <Movies /> },
-            { path: "/movies/:id", element: <MovieDetails /> },
-            { path: "/movies/add", element: <MovieAdd /> },
-            { path: "/movies/update/:id", element: <MovieUpdate /> },
+            { path: "/movies/:id", element: <AddUpdateMovie title="Movie Details" action="view"  /> },
+            { path: "/movies/add", element: <AddUpdateMovie title="Create a new movie" action="add" /> },
+            { path: "/movies/update/:id", element: <AddUpdateMovie title="Edit" action="update"  /> },
         ],
     },
 ];

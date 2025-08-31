@@ -7,7 +7,7 @@ interface LayoutProps {
 const PublicLayout = ({ children }: LayoutProps) => {
   return (
     <>
-        {children}
+      {children}
     </>
   );
 };

@@ -7,9 +7,9 @@ interface LayoutProps {
 const PrivateLayout = ({ children }: LayoutProps) => {
   return (
     <>
-      <main className="flex-grow container mx-auto p-4">
-        {children}
-      </main>
+
+      {children}
+
     </>
   );
 };
