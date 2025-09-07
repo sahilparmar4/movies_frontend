@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 type AuthState = {
-  currentUser: any; // Replace `any` with a proper user type if you have one
+  currentUser: any;
   setCurrentUser: (user: any) => void;
 };
 

@@ -1,11 +1,17 @@
 import { request } from "../utils/request"
 
-export const logInAPI = async (email: string, password: string, rememberMe: boolean) => {
-    const response = await request({url: "", method:"POST", body: {email, password, rememberMe},})
+interface loginPayload {
+    email: string,
+    password: string,
+    rememberMe: boolean
+}
+
+export const logInAPI = async (payload: loginPayload) => {
+    const response = await request({ url: "/auth/login", method: "POST", body: payload })
     return response;
 }
 
 export const logOutAPI = async () => {
-    const response = await request({url: "", method:"GET",})
+    const response = await request({ url: "/auth/logout", method: "GET" })
     return response;
 }

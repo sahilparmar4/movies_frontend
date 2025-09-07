@@ -1,37 +1,18 @@
 import axios, { type AxiosResponse, type ResponseType } from "axios";
 
-const token = localStorage.getItem("token");
-
 axios.interceptors.request.use(
   function (config) {
-    if (!config.headers) {
-      config.headers;
-    }
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers["Authorization"] = "Bearer " + token;
+      config.headers = config.headers || {};
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
-
   function (error) {
     return Promise.reject(error);
   }
 );
-
-let isRefreshing = false;
-let failedQueue: any = [];
-
-const processQueue = (error: any, token: string | null = null): void => {
-  failedQueue.forEach((prom: any) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-
-  failedQueue = [];
-};
 
 axios.interceptors.response.use(
   function (response) {
@@ -62,7 +43,8 @@ axios.interceptors.response.use(
 
         case 401:
           console.error("Unauthorized:", message);
-          // 🔹 Refresh token logic could go here instead of rejecting directly
+          localStorage.clear();
+          window.location.href = "/login";
           return Promise.reject({ status, message });
 
         case 403:
@@ -82,23 +64,18 @@ axios.interceptors.response.use(
           return Promise.reject({ status, message });
       }
     } else if (error.request) {
-      // No response received
       console.error("No response from server:", error.request);
       return Promise.reject({
         status: 0,
         message: "No response from server. Please check your connection.",
       });
     } else {
-      // Axios config / network issue
       console.error("Axios Error:", error.message);
       return Promise.reject({ status: 0, message: error.message });
     }
   }
 );
 
-
-
-// Enable GPT-5 mini (Preview) for all clients
 export const request = async ({
   url,
   method = "GET",

@@ -1,11 +1,11 @@
 import React from 'react'
 
 interface CustomErrorProps {
-    message: string;
-    isError?: boolean;
+  message: string;
+  isError?: boolean | any;
 }
 
-const CustomError:React.FC<CustomErrorProps> = ({message, isError}) => {
+const CustomError: React.FC<CustomErrorProps> = ({ message, isError }) => {
   return (
     <>
       <div className='mt-1'>

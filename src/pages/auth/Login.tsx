@@ -1,13 +1,17 @@
-import React from 'react'
 import CustomInput from '../../components/CustomInput'
 import CustomButton from '../../components/CustomButton'
 import { boolean, object, string } from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import CustomError from '../../components/CustomError';
+import { useMutation } from '@tanstack/react-query';
+import { logInAPI } from '../../api/auth';
+import { toast } from 'react-toastify';
+import { useAuthStore } from '../../store/auth';
 
 const Login = () => {
-  const navifagate = useNavigate();
+  const navigate = useNavigate();
+  const {setCurrentUser} = useAuthStore()
   const loginSchema = object().shape({
       email: string().required('Email is required').email('Invalid email format'),
       password: string().required('Password is required'),
@@ -23,8 +27,26 @@ const Login = () => {
       validationSchema: loginSchema,
       onSubmit: async(values) => {
         console.log(values)
+        mutation.mutate({...values})
       }
     })
+
+    const mutation = useMutation({
+      mutationFn: logInAPI,
+      onSuccess: (data: any) => {
+        console.log(data)
+        if (data?.data?.token) {
+          localStorage.setItem('token', data.data.token);
+        }
+        toast(data?.message || "Login successful", {type: "success"})
+        setCurrentUser(data?.data)
+        navigate("/movies")
+      },
+      onError: (error: any) => {
+        toast(error?.message || "Something went wrong. Please try again.", {type: "error"})
+      }
+    })
+
   return (
     <div className="flex justify-center items-center flex-col w-full">
       <h1 className="text-text-primary heading-2">Sign in</h1>
@@ -67,7 +89,7 @@ const Login = () => {
           type="submit"
           title="Login"
           customClasses="mt-2 body-sm py-4"
-          isDisabled={false}
+          isDisabled={mutation.status === 'pending'}
         />
       </form>
     </div>
