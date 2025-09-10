@@ -87,7 +87,7 @@ const Login = () => {
         </div>
         <CustomButton
           type="submit"
-          title="Login"
+          title="Login" 
           customClasses="mt-2 body-sm py-4"
           isDisabled={mutation.status === 'pending'}
         />
